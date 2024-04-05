@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
-namespace CRM_SER_EWS.CRM.Models.Tareas
+namespace CRM_EWS.CRM.Models.Tareas
 {
     public class RegistroTarea
     {

@@ -1,7 +1,7 @@
-﻿using CRM_SER_EWS.CRM.Models;
+﻿using CRM_EWS.CRM.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace CRM_SER_EWS.CRM.Helpers
+namespace CRM_EWS.CRM.Helpers
 {
     public class RegistroAceiteContext : DbContext
     {

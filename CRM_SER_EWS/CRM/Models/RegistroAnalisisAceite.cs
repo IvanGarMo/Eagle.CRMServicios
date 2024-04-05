@@ -1,6 +1,6 @@
-﻿using CRM_SER_EWS.CRM.Helpers;
+﻿using CRM_EWS.CRM.Helpers;
 
-namespace CRM_SER_EWS.CRM.Models
+namespace CRM_EWS.CRM.Models
 {
     public class RegistroAnalisisAceite
     {
@@ -12,6 +12,13 @@ namespace CRM_SER_EWS.CRM.Models
         public string sucursal { get; set; }
         public bool activo { get; set; }
         public string? usuario { get; set; }
+    }
+
+    public class RegistroAnalisisAceiteViewModel : RegistroAnalisisAceite
+    {
+        public string nombreCliente { get; set; }
+        public string nombreVendedor { get; set; }
+        public string descripcionTipoAnalisis { get; set; }
     }
 
     public class QueryRegistroAnalisisAceite : IQuery

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CRM_SER_EWS.Analisis
+namespace CRM_EWS.Analisis
 {
     public class AnalisisAceite
     {

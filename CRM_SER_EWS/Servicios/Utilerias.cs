@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 
-namespace CRM_EWS.CRM.Helpers
+namespace CRM_EWS.Servicios
 {
     public class Utilerias
     {
@@ -21,21 +20,20 @@ namespace CRM_EWS.CRM.Helpers
             return usuario;
         }
 
-        public static IEnumerable<String> ListadoErrores(ModelStateDictionary modelState)
+        public static int GetUserId(HttpRequest request)
         {
-            if (!modelState.IsValid)
+            var tokenAuth = request.Headers["auth"].ToString();
+            if (String.IsNullOrWhiteSpace(tokenAuth))
             {
-                var modelErrors = new List<String>();
-                foreach (var mS in modelState.Values)
-                {
-                    foreach (var modelError in mS.Errors)
-                    {
-                        modelErrors.Add(modelError.ErrorMessage);
-                    }
-                }
-                return modelErrors;
+                throw new Exception("");
             }
-            return null;
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(tokenAuth);
+
+            var claimUsuario = token.Claims.Where(c => c.Type.Equals("USUARIO_ID")).FirstOrDefault();
+            var usuarioId = claimUsuario == null ? -1 : Int32.Parse(claimUsuario.Value);
+
+            return usuarioId;
         }
     }
 }

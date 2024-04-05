@@ -1,4 +1,7 @@
-using CRM_SER_EWS.CRM.Helpers;
+
+using CRM_EWS.CRM.Helpers;
+using CRM_EWS.CRM.Models.Equipos;
+using EWS_Contextos.Ventas;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +14,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ConfiguracionContext, ConfiguracionContext>();
 builder.Services.AddScoped<RegistroAceiteContext, RegistroAceiteContext>();
+builder.Services.AddScoped<EquipoContext, EquipoContext>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<ICatalogoVentas, CatalogoVentas>();
 
 builder.Services.AddCors(options =>
 {

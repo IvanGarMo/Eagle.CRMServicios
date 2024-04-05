@@ -1,4 +1,4 @@
-﻿namespace CRM_SER_EWS.Servicios
+﻿namespace CRM_EWS.Servicios
 {
     public class CursoSubmodulo
     {

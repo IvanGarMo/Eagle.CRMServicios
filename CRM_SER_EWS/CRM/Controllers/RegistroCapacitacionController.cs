@@ -1,10 +1,10 @@
-﻿using CRM_SER_EWS.CRM.Helpers;
-using CRM_SER_EWS.CRM.Models.Capacitaciones;
+﻿using CRM_EWS.CRM.Helpers;
+using CRM_EWS.CRM.Models.Capacitaciones;
 using EWS_SessionManager.Response;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace CRM_SER_EWS.CRM.Controllers
+namespace CRM_EWS.CRM.Controllers
 {
     [Route("Capacitacion")]
     public class RegistroCapacitacionController : Controller

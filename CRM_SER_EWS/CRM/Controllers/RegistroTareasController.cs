@@ -1,23 +1,29 @@
-﻿using CRM_SER_EWS.CRM.Helpers;
-using CRM_SER_EWS.CRM.Models;
-using CRM_SER_EWS.CRM.Models.Tareas;
+﻿using CRM_EWS.CRM.Helpers;
+using CRM_EWS.CRM.Models;
+using CRM_EWS.CRM.Models.Tareas;
+using CRM_EWS.Servicios;
 using EWS_SessionManager;
 using EWS_SessionManager.Response;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Linq.Expressions;
+using Utilerias = CRM_EWS.CRM.Helpers.Utilerias;
 
-namespace CRM_SER_EWS.CRM.Controllers
+namespace CRM_EWS.CRM.Controllers
 {
+    [Autorizado]
     [Route("Tarea")]
     public class RegistroTareasController : Controller
     {
         private readonly IConfiguration configuration;
-        public RegistroTareasController(IConfiguration configuration)
+        private readonly IHttpContextAccessor httpContextAccesor;
+        public RegistroTareasController(IHttpContextAccessor accessor, IConfiguration configuration)
         {
             this.configuration = configuration;
+            this.httpContextAccesor = accessor;
         }
 
+        [ActionName("RegistroTareaCrear")]
         [HttpPost]
         public IActionResult Index([FromBody] RegistroTarea tarea)
         {
@@ -36,7 +42,7 @@ namespace CRM_SER_EWS.CRM.Controllers
 
             if(tarea.fechaFin < tarea.fechaInicio)
             {
-                var rvm = new ResponseViewModel(1, 0, "La fecha de fin no puede ser posterior a la fecha de inicio");
+                var rvm = new ResponseViewModel(1, 0, "La fecha de fin no puede ser previa a la fecha de inicio");
                 return BadRequest(rvm);
             }
 
@@ -46,15 +52,30 @@ namespace CRM_SER_EWS.CRM.Controllers
                 {
                     try
                     {
+                        var username = Utilerias.GetUserName(this.Request);
+                        var idUsuario = CRM_EWS.Servicios.Utilerias.GetUserId(this.Request);
+                        var tienePermisoTareasOtros = new ProveedorPerfil(this.httpContextAccesor, this.configuration).TienePermiso(username, "SERVTAREAS_OTROS");
 
                         //Veo que la tarea exista y que se pueda modificar
                         if (tarea.idTarea > 0)
                         {
-                            var antTarea = rt.tareas.FirstOrDefault(t => t.idTarea == tarea.idTarea);
+                            var antTarea = rt.tareas
+                                .Where(t => t.idTarea == tarea.idTarea)
+                                .FirstOrDefault();
+
                             if (antTarea == null || antTarea.estado == EstadoTarea.Finalizada)
                             {
                                 tranc.Rollback();
                                 return StatusCode(400);
+                            }
+
+                            var empleadosAsignados = rt.relacionTareaEmpleados
+                                .Where(ea => ea.idTarea == tarea.idTarea)
+                                .ToList();
+                            
+                            if(!empleadosAsignados.Select(e => e.idEmpleado).ToList().Contains(idUsuario) && !tienePermisoTareasOtros)
+                            {
+                                return Unauthorized();
                             }
 
                             //Actualizo la informacion
@@ -91,6 +112,10 @@ namespace CRM_SER_EWS.CRM.Controllers
                             }
 
                             tarea.idTarea = idMaximaTarea;
+                            foreach(CheckList chkTarea in tarea.checkList)
+                            {
+                                chkTarea.terminado = false;
+                            }
                             rt.tareas.Add(tarea);
 
                             //Añado a los empleados asignados
@@ -114,6 +139,7 @@ namespace CRM_SER_EWS.CRM.Controllers
             }
         }
 
+        [ActionName("RegistroTConsultar")]
         [HttpGet]
         public IActionResult Consulta(RegistroTareaVistaQuery query)
         {
@@ -127,6 +153,10 @@ namespace CRM_SER_EWS.CRM.Controllers
                 ["idEstado"] = r => r.idEstado
             };
 
+            var username = Utilerias.GetUserName(this.Request);
+            var idUsuario = CRM_EWS.Servicios.Utilerias.GetUserId(this.Request);
+            var tienePermisoTareasOtros = new ProveedorPerfil(this.httpContextAccesor, this.configuration).TienePermiso(username, "SERVTAREAS_OTROS");
+
             using (RegistroTareaContext rt = new RegistroTareaContext(configuration))
             {
                 IQueryable<RegistroTareaVista> tareas = rt.tareasVista
@@ -134,7 +164,8 @@ namespace CRM_SER_EWS.CRM.Controllers
                     .Where(t => (query.rangoFechas == false) || (query.rangoFechas && t.fechaFin >= query.fechaInicioBusqueda && t.fechaFin <= query.fechaFinBusqueda))
                     .Where(t => query.tiposTarea.Count == 0 || query.tiposTarea.Contains(t.idTipoTarea))
                     .Where(t => query.estadoTarea.Count == 0 || query.estadoTarea.Contains(t.idEstado))
-                    .Where(t => query.empleados.Count == 0 || query.empleados.Contains(t.idEmpleado));
+                    .Where(t => query.empleados.Count == 0 || query.empleados.Contains(t.idEmpleado))
+                    .Where(t => (tienePermisoTareasOtros) || query.empleados.Contains(idUsuario));
 
                 tareas = tareas.ApplyOrdering(query, columnsMap);
                 var totalResultados = tareas.Count();

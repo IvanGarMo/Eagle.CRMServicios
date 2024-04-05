@@ -1,10 +1,10 @@
-﻿using CRM_SER_EWS.Analisis;
-using CRM_SER_EWS.CRM.Helpers;
+﻿using CRM_EWS.Analisis;
+using CRM_EWS.CRM.Helpers;
 using EWS_SessionManager;
 using EWS_SessionManager.Response;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CRM_SER_EWS.CRM.Controllers
+namespace CRM_EWS.CRM.Controllers
 {
     [Autorizado]
     [Route("Catalogo/Analisis")]
@@ -23,7 +23,7 @@ namespace CRM_SER_EWS.CRM.Controllers
         {
             try
             {
-                var analisis = _configuracion.analisis.Where(a => a.activo);
+                var analisis = _configuracion.analisis.ToList<AnalisisAceite>();
                 return Ok(analisis);
             } catch(Exception ex)
             {
@@ -40,7 +40,7 @@ namespace CRM_SER_EWS.CRM.Controllers
             try
             {
                 var analisis = _configuracion.analisis.Find(id);
-                if (analisis is null || !analisis.activo)
+                if (analisis is null)
                 {
                     return NotFound();
                 }
@@ -81,7 +81,7 @@ namespace CRM_SER_EWS.CRM.Controllers
                 else
                 {
                     var antAnalisis = _configuracion.analisis.Find(analisis.idAnalisis);
-                    if (antAnalisis is null || !antAnalisis.activo)
+                    if (antAnalisis is null)
                     {
                         return NotFound();
                     }
@@ -107,7 +107,7 @@ namespace CRM_SER_EWS.CRM.Controllers
             try
             {
                 var analisis = _configuracion.analisis.Find(id);
-                if (analisis is null || !analisis.activo)
+                if (analisis is null)
                 {
                     return NotFound();
                 }

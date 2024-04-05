@@ -1,6 +1,6 @@
-﻿using CRM_SER_EWS.CRM.Helpers;
+﻿using CRM_EWS.CRM.Helpers;
 
-namespace CRM_SER_EWS.CRM.Models.Tareas
+namespace CRM_EWS.CRM.Models.Tareas
 {
     public class RegistroTareaVista
     {

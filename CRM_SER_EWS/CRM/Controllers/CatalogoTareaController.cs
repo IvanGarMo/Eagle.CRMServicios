@@ -1,10 +1,12 @@
-﻿using CRM_SER_EWS.CRM.Helpers;
-using CRM_SER_EWS.Servicios;
+﻿using CRM_EWS.CRM.Helpers;
+using CRM_EWS.Servicios;
 using EWS_SessionManager;
 using EWS_SessionManager.Response;
 using Microsoft.AspNetCore.Mvc;
+using Utilerias = CRM_EWS.CRM.Helpers.Utilerias;
 
-namespace CRM_SER_EWS.CRM.Controllers
+
+namespace CRM_EWS.CRM.Controllers
 {
     [Autorizado]
     [Route("Catalogo/Tarea")]

@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace CRM_SER_EWS.CRM.Helpers
+namespace CRM_EWS.CRM.Helpers
 {
     public static class Extension
     {

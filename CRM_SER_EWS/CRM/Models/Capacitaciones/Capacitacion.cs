@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace CRM_SER_EWS.CRM.Models.Capacitaciones
+namespace CRM_EWS.CRM.Models.Capacitaciones
 {
     public class Capacitacion
     {

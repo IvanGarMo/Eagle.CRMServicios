@@ -1,4 +1,4 @@
-﻿namespace CRM_SER_EWS.CRM.Models
+﻿namespace CRM_EWS.CRM.Models
 {
     public class ResultadoPaginado<T>
     {

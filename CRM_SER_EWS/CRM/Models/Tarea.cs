@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CRM_SER_EWS.Servicios
+namespace CRM_EWS.Servicios
 {
     public class Tarea
     {
@@ -16,5 +16,6 @@ namespace CRM_SER_EWS.Servicios
         public string color { get; set; }
         public string? usuario { get; set; }
         public bool activo { get; set; }
+        public bool visibleFueraModulo { get; set; }
     }
 }

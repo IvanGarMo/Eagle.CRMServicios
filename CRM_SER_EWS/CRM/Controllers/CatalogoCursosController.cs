@@ -1,14 +1,16 @@
-﻿using CRM_SER_EWS.CRM.Helpers;
-using CRM_SER_EWS.CRM.Models;
-using CRM_SER_EWS.Servicios;
+﻿using CRM_EWS.CRM.Helpers;
+using CRM_EWS.CRM.Models;
+using CRM_EWS.Servicios;
 using EWS_SessionManager;
 using EWS_SessionManager.Response;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using Utilerias = CRM_EWS.CRM.Helpers.Utilerias;
 
-namespace CRM_SER_EWS.CRM.Controllers
+
+namespace CRM_EWS.CRM.Controllers
 {
     [Autorizado]
     [Route("Catalogo/Curso")]
@@ -52,7 +54,7 @@ namespace CRM_SER_EWS.CRM.Controllers
                 return BadRequest();
             }
 
-            if (Utilerias.ListadoErrores(this.ModelState) is not null)
+            if (Helpers.Utilerias.ListadoErrores(this.ModelState) is not null)
             {
                 var rvm = new ResponseViewModel(1, 0, null);
                 rvm.o = Utilerias.ListadoErrores(this.ModelState);
