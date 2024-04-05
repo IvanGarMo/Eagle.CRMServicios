@@ -1,5 +1,6 @@
 ﻿using CRM_EWS.CRM.Helpers;
 using CRM_EWS.CRM.Models;
+using CRM_SER_EWS.CRM.Helpers;
 using EWS_Contextos.Ventas;
 using EWS_SessionManager;
 using EWS_SessionManager.Response;
@@ -13,14 +14,16 @@ namespace CRM_EWS.CRM.Controllers
     public class RegistroAnalisisController : Controller
     {
         private readonly RegistroAceiteContext context;
+        private readonly ConfiguracionContext configuracionContext;
         private readonly ICatalogoVentas ventasContext;
         private readonly IConfiguration configuration;
 
-        public RegistroAnalisisController(RegistroAceiteContext context, ICatalogoVentas ventas, IConfiguration configuration)
+        public RegistroAnalisisController(RegistroAceiteContext context, ConfiguracionContext configuracionContext, ICatalogoVentas ventas, IConfiguration configuration)
         {
             this.context = context;
             this.ventasContext = ventas;
             this.configuration = configuration;
+            this.configuracionContext = configuracionContext;
         }
 
         [HttpGet]
@@ -55,11 +58,14 @@ namespace CRM_EWS.CRM.Controllers
                                         tipoAnalisis = a.tipoAnalisis,
                                         idVendedor = a.idVendedor, 
                                         sucursal = a.sucursal,
-                                        activo = a.activo, 
-                                        usuario = a.usuario, 
                                         nombreCliente = c.nombre,
                                         nombreVendedor = v.nombre, 
-                                        descripcionTipoAnalisis = t.descripcion
+                                        descripcionTipoAnalisis = t.nombre, 
+                                        idEquipo = a.idEquipo, 
+                                        compartimiento = a.compartimiento,
+                                        tipoLubricante = a.tipoLubricante, 
+                                        odometroTotal = a.odometroTotal,
+                                        odometroAceite = a.odometroAceite
                                      };
 
             var resultado = new ResultadoPaginado<RegistroAnalisisAceiteViewModel>(viewModelqueryable.ToList(), query.Page, totalResultados, query.PageSize);
@@ -82,16 +88,28 @@ namespace CRM_EWS.CRM.Controllers
                 return BadRequest(rvm);
             }
 
+            var analisis = configuracionContext.analisis.Find(registro.tipoAnalisis);
+
+            if(analisis is null) { 
+                return BadRequest(); 
+            }
+
             try
             {
-                if(registro.idRegistro == 0)
+                var mapper = MapperConfig.InitializaAutomapper();
+                var registroEntity = mapper.Map<RegistroAnalisisAceiteEntity>(registro);
+
+                if(registroEntity.idRegistro == 0)
                 {
-                    registro.usuario = Utilerias.GetUserName(this.Request);
-                    registro.activo = true;
-                    context.analisis.Add(registro);
+                    registroEntity.usuario = Utilerias.GetUserName(this.Request);
+                    registroEntity.activo = true;
+                    registroEntity.costo = analisis.costo;
+                    context.analisis.Add(registroEntity);
                     context.SaveChanges();
                 }
+
                 return Ok();
+
             } catch(Exception ex)
             {
                 var rvm = new ResponseViewModel(1, 0, "Ha habido un error");

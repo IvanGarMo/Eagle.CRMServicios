@@ -5,7 +5,7 @@ namespace CRM_EWS.CRM.Helpers
 {
     public class RegistroAceiteContext : DbContext
     {
-        public DbSet<RegistroAnalisisAceite> analisis { get; set; }
+        public DbSet<RegistroAnalisisAceiteEntity> analisis { get; set; }
         private readonly IConfiguration configuration;
 
         public RegistroAceiteContext(IConfiguration configuration)
@@ -24,9 +24,9 @@ namespace CRM_EWS.CRM.Helpers
             base.OnModelCreating(modelBuilder);
 
             //Configuración de la tabla de analisis de aceite
-            modelBuilder.Entity<RegistroAnalisisAceite>().HasKey(r => r.idRegistro);
-            modelBuilder.Entity<RegistroAnalisisAceite>().ToTable("AnalisisAceite", schema: "serv");
-            modelBuilder.Entity<RegistroAnalisisAceite>().Property(r => r.idRegistro).ValueGeneratedOnAdd();
+            modelBuilder.Entity<RegistroAnalisisAceiteEntity>().HasKey(r => r.idRegistro);
+            modelBuilder.Entity<RegistroAnalisisAceiteEntity>().ToTable("AnalisisAceite", schema: "serv");
+            modelBuilder.Entity<RegistroAnalisisAceiteEntity>().Property(r => r.idRegistro).ValueGeneratedOnAdd();
         }
     }
 }
