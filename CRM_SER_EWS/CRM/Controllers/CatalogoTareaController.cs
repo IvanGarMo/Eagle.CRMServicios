@@ -1,5 +1,6 @@
 ﻿using CRM_EWS.CRM.Helpers;
-using CRM_EWS.Servicios;
+using CRM_SER_EWS.CRM.Helpers;
+using CRM_SER_EWS.CRM.Models.Tareas;
 using EWS_SessionManager;
 using EWS_SessionManager.Response;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +24,7 @@ namespace CRM_EWS.CRM.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            var tareas = _configuracion.tareas.Where<Tarea>(t => t.activo);
+            var tareas = _configuracion.tareas.Where<TareaEntity>(t => t.activo);
             return Ok(tareas);
         }
 
@@ -43,11 +44,6 @@ namespace CRM_EWS.CRM.Controllers
         [HttpPost]
         public IActionResult Crear([FromBody] Tarea? t)
         {
-            if(t is null)
-            {
-                return BadRequest();
-            }
-
             if (Utilerias.ListadoErrores(this.ModelState) is not null)
             {
                 var rvm = new ResponseViewModel(1, 0, null);
@@ -57,25 +53,28 @@ namespace CRM_EWS.CRM.Controllers
 
             try
             {
+                var mapper = MapperConfig.InitializaAutomapper();
+                var tareaEntity = mapper.Map<TareaEntity>(t);
                 //De lo contrario, tengo que ver si es un update o una creación
-                if (t.idTarea == 0)
+                if (tareaEntity.idTarea == 0)
                 {
-                    t.usuario = Utilerias.GetUserName(this.Request);
-                    t.activo = true;
-                    _configuracion.tareas.Add(t);
+                    tareaEntity.usuario = Utilerias.GetUserName(this.Request);
+                    tareaEntity.activo = true;
+                    _configuracion.tareas.Add(tareaEntity);
                     _configuracion.SaveChanges();
                 }
                 else
                 {
-                    var antTarea = _configuracion.tareas.Find(t.idTarea);
+                    var antTarea = _configuracion.tareas.Find(tareaEntity.idTarea);
                     if (antTarea is null || !antTarea.activo)
                     {
                         return NotFound();
                     }
-                    antTarea.nombre = t.nombre;
-                    antTarea.descripcion = t.descripcion;
-                    antTarea.color = t.color;
-                    antTarea.activo = t.activo;
+                    antTarea.nombre = tareaEntity.nombre;
+                    antTarea.descripcion = tareaEntity.descripcion;
+                    antTarea.color = tareaEntity.color;
+                    antTarea.activo = tareaEntity.activo;
+                    antTarea.visibleFueraModulo = tareaEntity.visibleFueraModulo;
                     _configuracion.SaveChanges();
                 }
                 return Ok();
