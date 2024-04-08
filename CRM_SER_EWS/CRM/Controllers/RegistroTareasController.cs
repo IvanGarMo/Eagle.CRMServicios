@@ -2,6 +2,7 @@
 using CRM_EWS.CRM.Models;
 using CRM_EWS.CRM.Models.Tareas;
 using CRM_EWS.Servicios;
+using CRM_SER_EWS.CRM.Helpers;
 using EWS_SessionManager;
 using EWS_SessionManager.Response;
 using Microsoft.AspNetCore.Mvc;
@@ -27,11 +28,6 @@ namespace CRM_EWS.CRM.Controllers
         [HttpPost]
         public IActionResult Index([FromBody] RegistroTarea tarea)
         {
-            if (tarea is null)
-            {
-                return BadRequest();
-            }
-
             if (Utilerias.ListadoErrores(this.ModelState) is not null)
             {
                 var rvm = new ResponseViewModel(1, 0, null);
@@ -39,14 +35,10 @@ namespace CRM_EWS.CRM.Controllers
                 return BadRequest(rvm);
             }
 
+            var mapper = MapperConfig.InitializaAutomapper();
+            var tareaEntity = mapper.Map<RegistroTareaEntity>(tarea);
 
-            if(tarea.fechaFin < tarea.fechaInicio)
-            {
-                var rvm = new ResponseViewModel(1, 0, "La fecha de fin no puede ser previa a la fecha de inicio");
-                return BadRequest(rvm);
-            }
-
-            using(RegistroTareaContext rt = new RegistroTareaContext(configuration))
+            using (RegistroTareaContext rt = new RegistroTareaContext(configuration))
             {
                 using (IDbContextTransaction tranc = rt.Database.BeginTransaction())
                 {
@@ -57,7 +49,7 @@ namespace CRM_EWS.CRM.Controllers
                         var tienePermisoTareasOtros = new ProveedorPerfil(this.httpContextAccesor, this.configuration).TienePermiso(username, "SERVTAREAS_OTROS");
 
                         //Veo que la tarea exista y que se pueda modificar
-                        if (tarea.idTarea > 0)
+                        if (tareaEntity.idTarea > 0)
                         {
                             var antTarea = rt.tareas
                                 .Where(t => t.idTarea == tarea.idTarea)
@@ -86,6 +78,8 @@ namespace CRM_EWS.CRM.Controllers
                             antTarea.comentarios = tarea.comentarios;
                             antTarea.notas = tarea.notas;
                             antTarea.checkList = tarea.checkList;
+                            antTarea.noRequiereCliente = tarea.noRequiereCliente;
+                            antTarea.idCliente = tarea.idCliente;
 
                             //Elimino a los anteriores empleados asignados, para poder volverlo a guardar
                             var emps = rt.relacionTareaEmpleados.Where(r => r.idTarea == antTarea.idTarea);
@@ -111,23 +105,24 @@ namespace CRM_EWS.CRM.Controllers
                                 idMaximaTarea = 1;
                             }
 
-                            tarea.idTarea = idMaximaTarea;
-                            foreach(CheckList chkTarea in tarea.checkList)
+                            tareaEntity.idTarea = idMaximaTarea;
+                            foreach(CheckList chkTarea in tareaEntity.checkList)
                             {
                                 chkTarea.terminado = false;
                             }
-                            rt.tareas.Add(tarea);
+                            rt.tareas.Add(tareaEntity);
 
                             //Añado a los empleados asignados
-                            for (int i = 0; i < tarea.empleados.Count; i++)
+                            for (int i = 0; i < tareaEntity.empleados.Count; i++)
                             {
-                                rt.relacionTareaEmpleados.Add(new RelacionTareaEmpleado(tarea.idTarea, tarea.empleados[i]));
+                                rt.relacionTareaEmpleados.Add(new RelacionTareaEmpleado(tareaEntity.idTarea, tareaEntity.empleados[i]));
                             }
                             rt.SaveChanges();
                         }
 
                         tranc.Commit();
-                    } catch(Exception ex)
+                    }
+                    catch(Exception ex)
                     {
                         tranc.Rollback();
                         var rvm = new ResponseViewModel(1, 0, "Ha habido un error");

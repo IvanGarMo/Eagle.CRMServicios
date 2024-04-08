@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CRM_EWS.CRM.Models;
+using CRM_EWS.CRM.Models.Tareas;
 
 namespace CRM_SER_EWS.CRM.Helpers
 {
@@ -10,6 +11,7 @@ namespace CRM_SER_EWS.CRM.Helpers
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<RegistroAnalisisAceite, RegistroAnalisisAceiteEntity>();
+                cfg.CreateMap<RegistroTarea, RegistroTareaEntity>();
             });
 
             var mapper = new Mapper(config);

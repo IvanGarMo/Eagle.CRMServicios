@@ -76,11 +76,6 @@ namespace CRM_EWS.CRM.Controllers
         [ActionName("Captura")]
         public IActionResult RegistraAnalisis([FromBody] RegistroAnalisisAceite registro)
         {
-            if (registro is null)
-            {
-                return BadRequest();
-            }
-
             if (Utilerias.ListadoErrores(this.ModelState) is not null)
             {
                 var rvm = new ResponseViewModel(1, 0, null);
