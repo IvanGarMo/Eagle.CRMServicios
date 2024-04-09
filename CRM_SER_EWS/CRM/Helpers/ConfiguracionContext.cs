@@ -1,13 +1,14 @@
 ﻿using CRM_EWS.Analisis;
 using CRM_EWS.CRM.Models;
 using CRM_EWS.Servicios;
+using CRM_SER_EWS.CRM.Models.Tareas;
 using Microsoft.EntityFrameworkCore;
 
 namespace CRM_EWS.CRM.Helpers
 {
     public class ConfiguracionContext : DbContext
     {
-        public DbSet<Tarea> tareas { get; set; }
+        public DbSet<TareaEntity> tareas { get; set; }
         public DbSet<AnalisisAceite> analisis {get;set;}
 
         public DbSet<Curso> cursos { get; set; }
@@ -25,10 +26,10 @@ namespace CRM_EWS.CRM.Helpers
         {
             base.OnModelCreating(modelBuilder);
             //Configuración de la tabla de tareas
-            modelBuilder.Entity<Tarea>().HasKey(t => t.idTarea);
-            modelBuilder.Entity<Tarea>().ToTable("CatTareas", schema: "serv");
-            modelBuilder.Entity<Tarea>().Property(t => t.idTarea).ValueGeneratedOnAdd();
-            modelBuilder.Entity<Tarea>().Property(t => t.visibleFueraModulo).HasColumnName("visibleFueraModulo");
+            modelBuilder.Entity<TareaEntity>().HasKey(t => t.idTarea);
+            modelBuilder.Entity<TareaEntity>().ToTable("CatTareas", schema: "serv");
+            modelBuilder.Entity<TareaEntity>().Property(t => t.idTarea).ValueGeneratedOnAdd();
+            modelBuilder.Entity<TareaEntity>().Property(t => t.visibleFueraModulo).HasColumnName("visibleFueraModulo");
 
             //Configuración de la tabla de analisis de haceite
             modelBuilder.Entity<AnalisisAceite>().HasKey(a => a.idAnalisis);

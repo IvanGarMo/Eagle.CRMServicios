@@ -6,24 +6,28 @@ namespace CRM_EWS.CRM.Models
     public abstract class RegistroAnalisisAceiteBase
     {
         public int idRegistro { get; set; }
-        [Required(AllowEmptyStrings = false)]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "El id del cliente es un campo requerido")]
+        [MaxLength(10, ErrorMessage = "El campo id del cliente no puede exceder de 10 caracteres")]
         public string idCliente { get; set; }
+        [Required(ErrorMessage = "Fecha del análisis es un campo requerido")]
         public DateTime fecha { get; set; }
-        [Required]
+        [Required(ErrorMessage = "El campo tipo de analisis es necesario")]
         public int tipoAnalisis { get; set; }
-        [Required(AllowEmptyStrings = false)]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "El campo id del vendedor es requerido")]
+        [MaxLength(10, ErrorMessage = "El campo id del vendedor no puede exceder de 10 caracteres")]
         public string idVendedor { get; set; }
-        [Required(AllowEmptyStrings = false)]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "El campo sucursal es requerido")]
+        [MaxLength(30, ErrorMessage = "El campo sucursal no puede exceder de 30 caracteres")]
         public string sucursal { get; set; }
-        [MaxLength(100)]
+        [MaxLength(100, ErrorMessage = "El campo id de equipo no puede exceder de 100 caracteres")]
         public string idEquipo { get; set; }
-        [MaxLength(200)]
+        [MaxLength(200, ErrorMessage = "El campo compartimiento no puede exceder de 200 caracteres")]
         public string compartimiento { get; set; }
-        [MaxLength(200)]
+        [MaxLength(200, ErrorMessage ="El campo tipo de lubricante no puede exceder de 200 caracteres")]
         public string tipoLubricante { get; set; }
-        [MaxLength(100)]
+        [MaxLength(100, ErrorMessage = "El campo odometro total no puede exceder de 100 caracteres")]
         public string odometroTotal { get; set; }
-        [MaxLength(100)]
+        [MaxLength(100, ErrorMessage = "El campo odometro aceite no puede exceder de 100 caracteres")]
         public string odometroAceite { get; set; }
 
         protected RegistroAnalisisAceiteBase()
