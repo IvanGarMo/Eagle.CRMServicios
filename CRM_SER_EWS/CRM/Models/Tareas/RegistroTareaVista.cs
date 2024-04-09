@@ -13,6 +13,7 @@ namespace CRM_EWS.CRM.Models.Tareas
         public string descripcion { get; set; }
         public string notas { get; set; }
         public int idEmpleado { get; set; }
+        public string empleado { get; set; }
         public int idEstado { get; set; }
         public string descripcionEstado { get; set; }
         public string colorEstado { get; set; }
@@ -47,9 +48,9 @@ namespace CRM_EWS.CRM.Models.Tareas
             empleados = new List<int>();
             estadoTarea = new List<int>();
             fechaEspecifica = DateTime.Now;
-            rangoFechas = false;
-            fechaInicioBusqueda = DateTime.Now;
-            fechaFinBusqueda = DateTime.Now;
+            rangoFechas = true;
+            fechaInicioBusqueda = DateTime.Now.AddDays(-15);
+            fechaFinBusqueda = DateTime.Now.AddDays(15);
             Page = 1;
             PageSize = 20;
             SortBy = "fechaFin";

@@ -111,5 +111,20 @@ namespace CRM_EWS.CRM.Controllers
                 return StatusCode(500, rvm);
             }
         }
+
+        [ActionName("Estado")]
+        [HttpGet]
+        [Route("Estado")]
+        public IActionResult TareasEstados()
+        {
+            var listaEstados = new[] { 
+                new { idEstado = 1, descripcion = "Sin iniciar", color = "grey" },
+                new { idEstado = 2, descripcion = "En curso", color = "orange" },
+                new { idEstado = 3, descripcion = "Completado", color = "green" },
+                new { idEstado = 4, descripcion = "Con retraso", color = "red" }
+            } ;
+
+            return Ok(listaEstados);
+        }
     }
 }
