@@ -65,7 +65,10 @@ namespace CRM_EWS.CRM.Controllers
                                         compartimiento = a.compartimiento,
                                         tipoLubricante = a.tipoLubricante, 
                                         odometroTotal = a.odometroTotal,
-                                        odometroAceite = a.odometroAceite
+                                        odometroAceite = a.odometroAceite,
+                                        numeroGuia = a.numeroGuia,
+                                        costo = a.costo,
+                                        moneda = a.moneda
                                      };
 
             var resultado = new ResultadoPaginado<RegistroAnalisisAceiteViewModel>(viewModelqueryable.ToList(), query.Page, totalResultados, query.PageSize);
@@ -99,6 +102,7 @@ namespace CRM_EWS.CRM.Controllers
                     registroEntity.usuario = Utilerias.GetUserName(this.Request);
                     registroEntity.activo = true;
                     registroEntity.costo = analisis.costo;
+                    registroEntity.moneda = analisis.moneda;
                     context.analisis.Add(registroEntity);
                     context.SaveChanges();
                 }

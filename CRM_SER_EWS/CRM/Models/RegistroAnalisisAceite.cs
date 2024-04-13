@@ -30,6 +30,9 @@ namespace CRM_EWS.CRM.Models
         [MaxLength(100, ErrorMessage = "El campo odometro aceite no puede exceder de 100 caracteres")]
         public string odometroAceite { get; set; }
 
+        [MaxLength(70, ErrorMessage = "El campo número de guía no puede exceder de 70 caracteres")]
+        public string numeroGuia { get; set; }
+
         protected RegistroAnalisisAceiteBase()
         {
             idRegistro = 0;
@@ -43,6 +46,7 @@ namespace CRM_EWS.CRM.Models
             idVendedor = String.Empty;
             fecha = DateTime.Now;
             idEquipo = String.Empty;
+            numeroGuia = String.Empty;
         }
     }
 
@@ -54,6 +58,7 @@ namespace CRM_EWS.CRM.Models
     public class RegistroAnalisisAceiteEntity : RegistroAnalisisAceiteBase
     {
         public decimal costo { get; set; }
+        public string moneda { get; set; }
         public bool activo { get; set; }
         public string usuario { get; set; }
 
@@ -70,7 +75,8 @@ namespace CRM_EWS.CRM.Models
         public string nombreCliente { get; set; }
         public string nombreVendedor { get; set; }
         public string descripcionTipoAnalisis { get; set; }
-
+        public decimal costo { get; set; }
+        public string moneda { get; set; }
         public RegistroAnalisisAceiteViewModel() : base()
         {
             nombreCliente = String.Empty;
