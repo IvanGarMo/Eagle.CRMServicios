@@ -116,5 +116,29 @@ namespace CRM_EWS.CRM.Controllers
                 return StatusCode(500, rvm);
             }
         }
+
+        [HttpDelete]
+        [ActionName("Eliminar")]
+        [Route("{id}")]
+        public ActionResult Eliminar(int id)
+        {
+            try
+            {
+                var registro = context.analisis.Where(r => r.idRegistro == id).FirstOrDefault();
+                if(registro is null)
+                {
+                    return NotFound();
+                }
+                registro.activo = false;
+                context.SaveChanges();
+                return Ok();
+            }
+            catch(Exception ex) 
+            {
+                var rvm = new ResponseViewModel(1, 0, "Ha habido un error");
+                rvm.AnadeMensaje(ex.Message);
+                return StatusCode(500, rvm);
+            }
+        }
     }
 }

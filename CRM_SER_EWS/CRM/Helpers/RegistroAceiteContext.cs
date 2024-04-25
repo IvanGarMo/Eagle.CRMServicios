@@ -27,6 +27,7 @@ namespace CRM_EWS.CRM.Helpers
             modelBuilder.Entity<RegistroAnalisisAceiteEntity>().HasKey(r => r.idRegistro);
             modelBuilder.Entity<RegistroAnalisisAceiteEntity>().ToTable("AnalisisAceite", schema: "serv");
             modelBuilder.Entity<RegistroAnalisisAceiteEntity>().Property(r => r.idRegistro).ValueGeneratedOnAdd();
+            modelBuilder.Entity<RegistroAnalisisAceiteEntity>().HasQueryFilter(r => r.activo);
         }
     }
 }
