@@ -56,7 +56,7 @@ namespace CRM_EWS.CRM.Controllers
                 var mapper = MapperConfig.InitializaAutomapper();
                 var tareaEntity = mapper.Map<TareaEntity>(t);
                 //De lo contrario, tengo que ver si es un update o una creación
-                if (tareaEntity.idTarea == 0)
+                if (tareaEntity.idTipoTarea == 0)
                 {
                     tareaEntity.usuario = Utilerias.GetUserName(this.Request);
                     tareaEntity.activo = true;
@@ -65,7 +65,7 @@ namespace CRM_EWS.CRM.Controllers
                 }
                 else
                 {
-                    var antTarea = _configuracion.tareas.Find(tareaEntity.idTarea);
+                    var antTarea = _configuracion.tareas.Find(tareaEntity.idTipoTarea);
                     if (antTarea is null || !antTarea.activo)
                     {
                         return NotFound();

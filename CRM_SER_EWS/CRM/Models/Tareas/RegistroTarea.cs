@@ -65,6 +65,7 @@ namespace CRM_EWS.CRM.Models.Tareas
     {
         public RegistroTareaEntity() : base() { }
 
+        public bool activo { get; set; }
         public string checkListSerialized
         {
             get
@@ -87,6 +88,17 @@ namespace CRM_EWS.CRM.Models.Tareas
         {
             descripcion = String.Empty;
             terminado = false;
+        }
+    }
+
+    public class TareaEmpleados
+    {
+        public int idTarea { get; set; }
+        public List<Int32> idEmpleado { get; set; }
+
+        public TareaEmpleados()
+        {
+            idEmpleado = new List<Int32>();
         }
     }
 

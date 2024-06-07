@@ -13,8 +13,8 @@ namespace CRM_EWS.CRM.Models.Equipos
         public string sucursal { get; set; }
         public bool asignado { get; set; }
     }
-    
-    public class Equipo
+
+    public abstract class EquipoBase
     {
         public int idActf { get; set; }
         public string nombreEquipo { get; set; }
@@ -26,6 +26,36 @@ namespace CRM_EWS.CRM.Models.Equipos
         public string sucursalCompra { get; set; }
         public string sucursalActual { get; set; }
         public bool asignado { get; set; }
+    }
+     
+    public class Equipo : EquipoBase
+    {
+       public int tipoCapacidad { get; set; }
+       public decimal capacidad { get; set; }
+       public int idCategoria { get; set; }
+       public DateTime inicioOperacion { get; set; }
+
+        public Equipo()
+        {
+            idActf = 0;
+        }
+    }
+
+    public class EquipoEntity : Equipo
+    {
+        public string usuarioAlta { get; set; }
+        public DateTime fechaAlta { get; set; }
+        public string usuarioFum { get; set; }
+        public DateTime fechaFum { get; set; }
+        public decimal depreciacion { get; set; }
+        public int? idAnterior { get; set; }
+
+        public EquipoEntity()
+        {
+            idAnterior = null;
+            depreciacion = 10.0M;
+            fechaFum = DateTime.Now;
+        }
     }
 
     public class EquipoPrestamo

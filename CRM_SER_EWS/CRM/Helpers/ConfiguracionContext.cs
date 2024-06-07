@@ -8,8 +8,9 @@ namespace CRM_EWS.CRM.Helpers
 {
     public class ConfiguracionContext : DbContext
     {
+        public DbSet<TareaEstado> tareaEstados { get; set; }
         public DbSet<TareaEntity> tareas { get; set; }
-        public DbSet<AnalisisAceite> analisis {get;set;}
+        public DbSet<AnalisisAceite> analisis { get;set;}
 
         public DbSet<Curso> cursos { get; set; }
         public DbSet<CursoModulo> modulosCurso { get; set; }
@@ -26,10 +27,15 @@ namespace CRM_EWS.CRM.Helpers
         {
             base.OnModelCreating(modelBuilder);
             //Configuración de la tabla de tareas
-            modelBuilder.Entity<TareaEntity>().HasKey(t => t.idTarea);
+            modelBuilder.Entity<TareaEntity>().HasKey(t => t.idTipoTarea);
             modelBuilder.Entity<TareaEntity>().ToTable("CatTareas", schema: "serv");
-            modelBuilder.Entity<TareaEntity>().Property(t => t.idTarea).ValueGeneratedOnAdd();
+            modelBuilder.Entity<TareaEntity>().Property(t => t.idTipoTarea).ValueGeneratedOnAdd();
+            modelBuilder.Entity<TareaEntity>().Property(t => t.idTipoTarea).HasColumnName("idTarea");
             modelBuilder.Entity<TareaEntity>().Property(t => t.visibleFueraModulo).HasColumnName("visibleFueraModulo");
+
+            //Configuracion de los estados de tareas
+            modelBuilder.Entity<TareaEstado>().HasKey(t => t.idEstado);
+            modelBuilder.Entity<TareaEstado>().ToTable("TareasEstado", schema: "serv");
 
             //Configuración de la tabla de analisis de haceite
             modelBuilder.Entity<AnalisisAceite>().HasKey(a => a.idAnalisis);

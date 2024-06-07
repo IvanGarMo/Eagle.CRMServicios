@@ -4,7 +4,7 @@ namespace CRM_SER_EWS.CRM.Models.Tareas
 {
     public abstract class TareaBase
     {
-        public int idTarea { get; set; }
+        public int idTipoTarea { get; set; }
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Debe especificar un nombre de la tarea")]
         [StringLength(100, ErrorMessage = "El campo nombre no puede exceder de 100 caracteres")]
@@ -22,7 +22,7 @@ namespace CRM_SER_EWS.CRM.Models.Tareas
 
         public TareaBase()
         {
-            idTarea = 0;
+            idTipoTarea = 0;
             nombre = String.Empty;
             descripcion = String.Empty;
             color = String.Empty;
@@ -44,6 +44,20 @@ namespace CRM_SER_EWS.CRM.Models.Tareas
         {
             usuario = String.Empty;
             activo = true;
+        }
+    }
+
+    public class TareaEstado
+    {
+        public int idEstado { get; set; }
+        public string descripcion { get; set; }
+        public string color { get; set; }
+
+        public TareaEstado()
+        {
+            idEstado = 1;
+            descripcion = "Sin iniciar";
+            color = "grey";
         }
     }
 }

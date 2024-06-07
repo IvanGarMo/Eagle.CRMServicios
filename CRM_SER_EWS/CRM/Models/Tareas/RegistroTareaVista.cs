@@ -1,4 +1,5 @@
 ﻿using CRM_EWS.CRM.Helpers;
+using System.ComponentModel.DataAnnotations;
 
 namespace CRM_EWS.CRM.Models.Tareas
 {
@@ -6,6 +7,7 @@ namespace CRM_EWS.CRM.Models.Tareas
     {
         public int idTarea { get; set; }
         public int idTipoTarea { get; set; }
+        public string sucursal { get; set; }
         public string descripcionTipoTarea { get; set; }
         public string colorTipoTarea { get; set; }
         public DateTime fechaInicio { get; set; }
@@ -19,6 +21,7 @@ namespace CRM_EWS.CRM.Models.Tareas
         public string colorEstado { get; set; }
         public string idCliente { get; set; }
         public string nombreCliente { get; set; }
+        public bool noRequiereCliente { get; set; }
     }
 
     public class RegistroTareaVistaQuery : IQuery
@@ -52,9 +55,49 @@ namespace CRM_EWS.CRM.Models.Tareas
             fechaInicioBusqueda = DateTime.Now.AddDays(-15);
             fechaFinBusqueda = DateTime.Now.AddDays(15);
             Page = 1;
-            PageSize = 20;
+            PageSize = 200;
             SortBy = "fechaFin";
             IsSortAscending = false;
+        }
+    }
+
+    public class QueryTareaReporte
+    {
+        [Required]
+        [Range(minimum: 1, maximum: 2)]
+        public int opcion { get; set; }
+        public DateTime fechaInicio { get; set; }
+        public DateTime fechaFin { get; set; }
+        public List<int> estatus { get; set; }
+        public List<int> tipoTarea { get; set; }
+        public List<String> cliente { get; set; }
+        public List<int> empleado { get; set; }
+
+        [SortByValido(ErrorMessage = "El campo agrupar por no es válido")]
+        public string groupBy { get; set; }
+
+        public QueryTareaReporte()
+        {
+            fechaInicio = new DateTime(DateTime.Now.Year, 1, 1);
+            fechaFin = DateTime.Now;
+            estatus = new List<int>();
+            tipoTarea = new List<int>();
+            cliente = new List<string>();
+            empleado = new List<int>();
+            groupBy = "estado";
+        }
+
+        class SortByValido : ValidationAttribute
+        {
+            protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
+            {
+                var query = (QueryTareaReporte)validationContext.ObjectInstance;
+                if(query.groupBy.Equals("estado") || query.groupBy.Equals("tipo"))
+                {
+                    return ValidationResult.Success;
+                }
+                return new ValidationResult(this.ErrorMessage);
+            }
         }
     }
 }

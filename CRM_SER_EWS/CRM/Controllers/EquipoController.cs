@@ -2,6 +2,7 @@
 using CRM_EWS.CRM.Models;
 using CRM_EWS.CRM.Models.Equipos;
 using CRM_EWS.CRM.Models.Tareas;
+using CRM_SER_EWS.CRM.Helpers;
 using EWS_ContextoGobernador;
 using EWS_ContextoGobernador.Contexto;
 using EWS_ContextoGobernador.Operaciones;
@@ -68,6 +69,26 @@ namespace CRM_EWS.CRM.Controllers
             var resultado = new ResultadoPaginado<EquipoIndice>(listaEquipos, query.Page, listaEquipos.Count, query.PageSize);
             return Ok(resultado);
         }
+
+        //[HttpPost]
+        //public IActionResult CrearActualizarEquipo(Equipo equipo)
+        //{
+        //    if (equipo.idActf == 0)
+        //    {
+        //        var mapper = MapperConfig.InitializaAutomapper();
+        //        var equipoEntity = mapper.Map<EquipoEntity>(equipo);
+        //        equipoEntity.usuarioAlta = equipoEntity.usuarioFum = Utilerias.GetUserName(this.Request);
+        //        equipoEntity.fechaAlta = equipoEntity.fechaFum = DateTime.Now;
+        //        equipo.idActf = (context.equipos.Max<EquipoEntity, Nullable<Int32>>(e => e.idActf) ?? 0) + 1;
+        //        context.equipos.Add(equipoEntity);
+        //        context.SaveChanges();
+        //    }
+        //    else
+        //    {
+                
+        //    }
+
+        //}
 
         [HttpGet]
         [Route("{idEquipo}")]

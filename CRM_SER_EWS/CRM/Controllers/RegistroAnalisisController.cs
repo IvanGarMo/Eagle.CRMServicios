@@ -111,7 +111,7 @@ namespace CRM_EWS.CRM.Controllers
 
             } catch(Exception ex)
             {
-                var rvm = new ResponseViewModel(1, 0, "Ha habido un error");
+                var rvm = new ResponseViewModel(1, 0, "Hubo un error");
                 rvm.AnadeMensaje(ex.Message);
                 return StatusCode(500, rvm);
             }
@@ -135,7 +135,7 @@ namespace CRM_EWS.CRM.Controllers
             }
             catch(Exception ex) 
             {
-                var rvm = new ResponseViewModel(1, 0, "Ha habido un error");
+                var rvm = new ResponseViewModel(1, 0, "Hubo un error");
                 rvm.AnadeMensaje(ex.Message);
                 return StatusCode(500, rvm);
             }

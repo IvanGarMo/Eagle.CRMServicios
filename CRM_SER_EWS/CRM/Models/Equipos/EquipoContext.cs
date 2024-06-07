@@ -7,7 +7,7 @@ namespace CRM_EWS.CRM.Models.Equipos
     {
         private readonly IConfiguration configuration;
 
-        public DbSet<Equipo> equipos { get; set; }
+        public DbSet<EquipoEntity> equipos { get; set; }
         public DbSet<EquipoPrestamo> prestamos { get; set; }
         public DbSet<EquipoTraslado> traslados { get; set; }
 
@@ -25,17 +25,23 @@ namespace CRM_EWS.CRM.Models.Equipos
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Equipo>().ToTable("Inv_MaquinariaEquipo", schema: "acf");
-            modelBuilder.Entity<Equipo>().HasKey(e => e.idActf);
-            modelBuilder.Entity<Equipo>().Property(e => e.idActf).HasColumnName("ID_ActF");
-            modelBuilder.Entity<Equipo>().Property(e => e.nombreEquipo).HasColumnName("Nombre/Descripcion");
-            modelBuilder.Entity<Equipo>().Property(e => e.numSerie).HasColumnName("Num_Serie");
-            modelBuilder.Entity<Equipo>().Property(e => e.costoCompra).HasColumnName("CostoCompra");
-            modelBuilder.Entity<Equipo>().Property(e => e.fechaCompra).HasColumnName("Fecha_adquisicion");
-            modelBuilder.Entity<Equipo>().Property(e => e.modelo).HasColumnName("Modelo");
-            modelBuilder.Entity<Equipo>().Property(e => e.marca).HasColumnName("Marca");
-            modelBuilder.Entity<Equipo>().Property(e => e.sucursalCompra).HasColumnName("Sucursal");
-            modelBuilder.Entity<Equipo>().Property(e => e.sucursalActual).HasColumnName("sucursalActual");
+            modelBuilder.Entity<EquipoEntity>().ToTable("Inv_MaquinariaEquipo", schema: "acf");
+            modelBuilder.Entity<EquipoEntity>().HasKey(e => e.idActf);
+            modelBuilder.Entity<EquipoEntity>().Property(e => e.idActf).HasColumnName("ID_ActF");
+            modelBuilder.Entity<EquipoEntity>().Property(e => e.nombreEquipo).HasColumnName("Nombre/Descripcion");
+            modelBuilder.Entity<EquipoEntity>().Property(e => e.numSerie).HasColumnName("Num_Serie");
+            modelBuilder.Entity<EquipoEntity>().Property(e => e.costoCompra).HasColumnName("CostoCompra");
+            modelBuilder.Entity<EquipoEntity>().Property(e => e.fechaCompra).HasColumnName("Fecha_adquisicion");
+            modelBuilder.Entity<EquipoEntity>().Property(e => e.modelo).HasColumnName("Modelo");
+            modelBuilder.Entity<EquipoEntity>().Property(e => e.marca).HasColumnName("Marca");
+            modelBuilder.Entity<EquipoEntity>().Property(e => e.sucursalCompra).HasColumnName("Sucursal");
+            modelBuilder.Entity<EquipoEntity>().Property(e => e.sucursalActual).HasColumnName("sucursalActual");
+            modelBuilder.Entity<EquipoEntity>().Property(e => e.idCategoria).HasColumnName("Id_Categoria");
+            modelBuilder.Entity<EquipoEntity>().Property(e => e.inicioOperacion).HasColumnName("IniOperacion");
+            modelBuilder.Entity<EquipoEntity>().Property(e => e.usuarioAlta).HasColumnName("Usuario_Alta");
+            modelBuilder.Entity<EquipoEntity>().Property(e => e.fechaAlta).HasColumnName("Fecha_Alta");
+            modelBuilder.Entity<EquipoEntity>().Property(e => e.fechaFum).HasColumnName("Fecha_Fum");
+            modelBuilder.Entity<EquipoEntity>().Property(e => e.usuarioFum).HasColumnName("Usuario_Fum");
 
             modelBuilder.Entity<EquipoPrestamo>().ToTable("Inv_MaquinariaEquipoPrestamo", schema: "acf");
             modelBuilder.Entity<EquipoPrestamo>().Ignore(ep => ep.nombreCliente);
