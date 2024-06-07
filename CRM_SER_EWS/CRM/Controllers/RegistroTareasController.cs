@@ -83,7 +83,7 @@ namespace CRM_EWS.CRM.Controllers
                             antTarea.noRequiereCliente = tarea.noRequiereCliente;
                             antTarea.idCliente = tarea.idCliente;
                             antTarea.idTipoTarea = tarea.idTipoTarea;
-                            
+                            antTarea.activo = true;
 
                             //Elimino a los anteriores empleados asignados, para poder volverlo a guardar
                             //var emps = rt.relacionTareaEmpleados.Where(r => r.idTarea == antTarea.idTarea);
@@ -114,13 +114,14 @@ namespace CRM_EWS.CRM.Controllers
                             {
                                 chkTarea.terminado = false;
                             }
+                            tareaEntity.activo = true;
                             rt.tareas.Add(tareaEntity);
 
                             //Añado a los empleados asignados
-                            //for (int i = 0; i < tareaEntity.empleados.Count; i++)
-                            //{
-                            //    rt.relacionTareaEmpleados.Add(new RelacionTareaEmpleado(tareaEntity.idTarea, tareaEntity.empleados[i]));
-                            //}
+                            for (int i = 0; i < tareaEntity.empleados.Count; i++)
+                            {
+                                rt.relacionTareaEmpleados.Add(new RelacionTareaEmpleado(tareaEntity.idTarea, tareaEntity.empleados[i]));
+                            }
                             rt.SaveChanges();
                         }
 
